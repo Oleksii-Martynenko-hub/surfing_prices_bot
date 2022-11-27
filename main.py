@@ -9,20 +9,20 @@ itemList = {
     "enchantment": None,
     "quality": None,
   },
-  # "bread": {
-  #   "name": "bread",
-  #   "category": None,
-  #   "tier": None,
-  #   "enchantment": None,
-  #   "quality": None,
-  # },
-  # "raw beef": {
-  #   "name": "raw beef",
-  #   "category": None,
-  #   "tier": None,
-  #   "enchantment": None,
-  #   "quality": None,
-  # },
+  "bread": {
+    "name": "bread",
+    "category": None,
+    "tier": None,
+    "enchantment": None,
+    "quality": None,
+  },
+  "raw beef": {
+    "name": "raw beef",
+    "category": None,
+    "tier": None,
+    "enchantment": None,
+    "quality": None,
+  },
   "beef stew": {
     "name": "beef stew",
     "category": None,
@@ -39,6 +39,25 @@ itemList = {
   },
 }
 
+# TODO - DONE: Check how data client take buy and sell orders
+# TODO - have info, in progress: Make shell commands for running scripts
+# TODO - DONE: Record video for analysis and testing
+# TODO: Create script for travel between cities
+#         martlock -> martlock market,
+#         martlock market -> martlock,
+#         martlock -> bridgewatch,
+#         bridgewatch -> bridgewatch market,
+#         bridgewatch market -> bridgewatch,
+#         bridgewatch -> lymhurst,
+#         lymhurst -> lymhurst market,
+#         lymhurst market -> lymhurst,
+#         lymhurst -> fort sterling,
+#         fort sterling -> fort sterling market,
+#         fort sterling market -> fort sterling,
+#         fort sterling -> thetford,
+#         thetford -> thetford market,
+# TODO: Create a list of all items in the client
+
 def searchItemAtMarket(item):
   ySearchBar = 270
   xSearchBar = 750
@@ -48,16 +67,16 @@ def searchItemAtMarket(item):
   name, category, tier, enchantment, quality = dict(item).values()
   itemKeys = list(dict(item).keys())
   
-  while True:
-    pyautogui.click(xSearchBar, ySearchBar, duration=0.2) # click on name input
+  while True: # click on name input until it is focused
+    pyautogui.click(xSearchBar, ySearchBar, duration=0.2) 
     img = pyautogui.locateOnScreen(
       "images/input_cursor.png", 
-      confidence=0.95, 
+      confidence=0.9, 
       region=(615, 230, 740-615, 305-230)
     )
     img2 = pyautogui.locateOnScreen(
       "images/input_cursor2.png", 
-      confidence=0.95, 
+      confidence=0.9, 
       region=(615, 230, 740-615, 305-230)
     )
 
@@ -66,10 +85,13 @@ def searchItemAtMarket(item):
     if img != None or img2 != None:
       print("Input is focused")
       break
+        
+    print(" ?---- Can't find Input cursor")
   
   pyautogui.sleep(1)
   pyautogui.write(name, interval=0.25) # type name
 
+  # choose all of filters of item
   if category != None:
     pyautogui.click(xSearchBar + wSearchBar, ySearchBar, duration=0.2) # click on category list
     pyautogui.sleep(0.7)
@@ -109,7 +131,7 @@ def mapMarketItems():
 
     openOrdersByBuyBtn()
 
-    openOrderListIfClosed()
+    spreadOrderListIfCollapsed()
     pyautogui.sleep(2)
 
     closeOrderList()
@@ -123,34 +145,36 @@ def resetFilter():
   while True:
     img = pyautogui.locateCenterOnScreen(
       "images/reset_btn.png", 
-      confidence=0.95, 
+      confidence=0.9, 
       region=(1870, 235, 1940-1870, 305-235)
     )
 
     if img != None:
-      print("Filter reset")
+      print(" - Filter reset")
       pyautogui.click(*img, duration=0.2)
       break
+          
+    print(" ?---- Can't find Reset button")
   
   while True:
     img = pyautogui.locateCenterOnScreen(
       "images/reset_btn.png", 
-      confidence=0.95, 
+      confidence=0.9, 
       region=(866, 235, 920-866, 305-235)
     )
 
     if img != None:
-      print("Search value clear")
+      print(" - Search value clear")
       pyautogui.click(*img, duration=0.2)
       break
-  
-  return True
+    
+    print(" ?---- Can't find Reset button")
 
 def openOrdersByBuyBtn():
   while True:
     img = pyautogui.locateCenterOnScreen(
       "images/buy_btn.png", 
-      confidence=0.95, 
+      confidence=0.9, 
       region=(1690, 480, 1940-1690, 590-480)
     )
 
@@ -158,37 +182,41 @@ def openOrdersByBuyBtn():
       print("Open orders by Buy button")
       pyautogui.click(*img, duration=0.2)
       break
-  
-  return True
+      
+    print(" ?---- Can't find Buy button")
 
-def openOrderListIfClosed():
+def spreadOrderListIfCollapsed():
   while True:
     buyOrdersTitle = pyautogui.locateCenterOnScreen(
       "images/buy_orders_title.png", 
-      confidence=0.95, 
+      confidence=0.9, 
       region=(1715, 325, 1890-1715, 455-325)
     )
 
     if buyOrdersTitle != None:
-      print("Orders was opened")
+      print("Order list was spread")
       return
+    
+    print(" ?---- Can't find Order list")
 
     collapseOrdersBtn = pyautogui.locateCenterOnScreen(
       "images/collapse_orders_btn.png", 
-      confidence=0.95, 
+      confidence=0.9, 
       region=(1710, 315, 1820-1710, 405-315)
     )
 
     if collapseOrdersBtn != None:
-      print("Orders has been collapsed")
+      print("Order list has been spread")
       pyautogui.click(*collapseOrdersBtn, duration=0.2)
       break
+
+    print(" ?---- Can't find Collapse button")
 
 def closeOrderList():
   while True:
     closeBtn = pyautogui.locateCenterOnScreen(
       "images/close_btn.png", 
-      confidence=0.95, 
+      confidence=0.9, 
       region=(1190, 290, 1290-1190, 380-290)
     )
 
@@ -197,21 +225,41 @@ def closeOrderList():
       pyautogui.click(*closeBtn, duration=0.2)
       break
 
+    print(" ?---- Can't find close button")
+
+def closeMarketWindow():
+  while True:
+    closeBtn = pyautogui.locateCenterOnScreen(
+      "images/close_btn.png", 
+      confidence=0.9, 
+      region=(1880, 80, 1980-1880, 160-80)
+    )
+
+    if closeBtn != None:
+      print("\n ---- Market has been closed")
+      pyautogui.click(*closeBtn, duration=0.2)
+      break
+
+    print(" ?---- Can't find close button")
+
 def isMarketWindowOpened():
   while True:
     img = pyautogui.locateCenterOnScreen(
       "images/market_portrait.png", 
-      confidence=0.95, 
+      confidence=0.9, 
       region=(590, 70, 880-590, 290-70)
     )
 
     if img != None:
-      print(" ---- Market window is opened")
-      pyautogui.moveTo(*img, duration=0.2)
+      print("\n ---- Market has been opened")
+      pyautogui.click(*img, duration=0.2)
       break
-  
-  return True
+    
+    if img == None:
+      print(" ?---- Can't find Market window")
+      pyautogui.click(1780, 320, duration=0.2)
 
+# TODO: Change search and activation methods of window
 def isAlbionWindowActive():
   while True:
     x, y = pyautogui.position()
@@ -226,16 +274,20 @@ def isAlbionWindowActive():
   return True
 
 def run():
-  print(" ------ START ------")
+  print("\n ------ START ------")
 
-  pyautogui.countdown(5)
+  pyautogui.countdown(3)
 
-  isMarketOpened = isMarketWindowOpened()
+  isMarketWindowOpened()
 
-  if isMarketOpened:
+  resetFilter()
+  pyautogui.sleep(0.7)
 
-    mapMarketItems()
+  mapMarketItems()
 
+  closeMarketWindow()
+
+  print("\n ------ DONE ------")
 
 run()
 
