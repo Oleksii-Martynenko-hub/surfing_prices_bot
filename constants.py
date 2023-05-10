@@ -27,10 +27,9 @@ FARM = Farm(**{
 })
 
 Islands = namedtuple("ISLANDS", [
-  # "OLEKSIIM",
-  # "M4RTIN",
+  # "M4RTLOCK",
   # "PROCESS",
-  "EPMTYPLAYER",
+  "PLAYERONE",
   # "FAARM1",
   # "FAARM2",
   # "FAARM3",
@@ -38,10 +37,9 @@ Islands = namedtuple("ISLANDS", [
   ])
 
 ISLANDS = Islands(**{
-  # "OLEKSIIM": 'images/oleksiim_island_minimap_title.png',
-  # "M4RTIN": 'images/m4rtin_island_minimap_title.png',
+  # "M4RTLOCK": 'images/m4rtlock_island_minimap_title.png',
   # "PROCESS": 'images/process_island_minimap_title.png',
-  "EPMTYPLAYER": 'images/epmtyplayer_island_minimap_title.png',
+  "PLAYERONE": 'images/playerone_island_minimap_title.png',
   # "FAARM1": 'images/faarm1_island_minimap_title.png',
   # "FAARM2": 'images/faarm2_island_minimap_title.png',
   # "FAARM3": 'images/faarm3_island_minimap_title.png',
